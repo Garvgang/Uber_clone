@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false,
+    select: false, // this means when we search db we will not get the 
   },
   socketId: {
     type: String,
