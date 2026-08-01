@@ -34,18 +34,18 @@ const CaptainSignup = () => {
       vehicle: {
         color: vehicleColor,
         plate: vehiclePlate,
-        capacity: vehicleCapacity,
+        capacity: Number(vehicleCapacity),
         vehicleType: vehicleType
       }
     }
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/register`, captainData );
 
     if (response.status === 201) {
       const data = response.data
       setCaptain(data.captain)
       localStorage.setItem('token', data.token)
-      navigate('/captain-home')
+      navigate('/captain/home')
     }
 
     setEmail('')
@@ -160,7 +160,7 @@ const CaptainSignup = () => {
               <option value="" disabled>Select Vehicle Type</option>
               <option value="car">Car</option>
               <option value="auto">Auto</option>
-              <option value="moto">Moto</option>
+              <option value="motorcycle">Motorcycle</option>
             </select>
           </div>
 
