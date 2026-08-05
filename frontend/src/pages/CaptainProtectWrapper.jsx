@@ -6,15 +6,16 @@ import React, { useContext, useEffect, useState } from 'react'
 const CaptainProtectWrapper=({children})=>{
     const token=localStorage.getItem('token');
     const navigate=useNavigate();
-    const {captain,setCaptain}=useState(CaptainDataContext);
+    const {captain,setCaptain}=useContext(CaptainDataContext);
     const [isLoading,setIsLoading]=useState(true);
 
     useEffect(()=>{
         if(!token){
             navigate('/captain-login');
+            return ;
         }
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/captain-profile`,{
+        axios.get(`${import.meta.env.VITE_BASE_URL}/captain/profile`,{
             headers:{
                 Authorization: `Bearer ${token}` 
             }

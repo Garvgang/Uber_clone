@@ -23,41 +23,43 @@ const CaptainSignup = () => {
 
 
   const submitHandler = async (e) => {
-    e.preventDefault()
-    const captainData = {
-      fullname: {
-        firstname: firstName,
-        lastname: lastName
-      },
-      email: email,
-      password: password,
-      vehicle: {
-        color: vehicleColor,
-        plate: vehiclePlate,
-        capacity: Number(vehicleCapacity),
-        vehicleType: vehicleType
-      }
-    }
+  e.preventDefault();
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/register`, captainData );
+  const captainData = {
+    fullname: {
+      firstname: firstName,
+      lastname: lastName
+    },
+    email,
+    password,
+    vehicle: {
+      color: vehicleColor,
+      plate: vehiclePlate,
+      capacity: Number(vehicleCapacity),
+      vehicleType
+    }
+  };
+
+  console.log(captainData);
+
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/captain/register`,
+      captainData
+    );
+
+    console.log(response.data);
 
     if (response.status === 201) {
-      const data = response.data
-      setCaptain(data.captain)
-      localStorage.setItem('token', data.token)
-      navigate('/captain/home')
+      setCaptain(response.data.captain);
+      localStorage.setItem("token", response.data.token);
+      navigate("/captain-home");
     }
 
-    setEmail('')
-    setFirstName('')
-    setLastName('')
-    setPassword('')
-    setVehicleColor('')
-    setVehiclePlate('')
-    setVehicleCapacity('')
-    setVehicleType('')
-
+  } catch (err) {
+    console.log(err.response.data);
   }
+};
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>
@@ -160,7 +162,7 @@ const CaptainSignup = () => {
               <option value="" disabled>Select Vehicle Type</option>
               <option value="car">Car</option>
               <option value="auto">Auto</option>
-              <option value="motorcycle">Motorcycle</option>
+              <option value="motorcycle">Moto</option>
             </select>
           </div>
 
