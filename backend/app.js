@@ -5,8 +5,10 @@ const cors = require("cors");
 const app = express();
 const cookieParser=require('cookie-parser');
 const connectToDb = require("./db/db");
-const userRoute = require("./routes/user.route");
-const captainRoute = require("./routes/captain.routes");
+const userRoutes = require("./routes/user.routes");
+const captainRoutes = require("./routes/captain.routes");
+const mapRoutes =require('./routes/maps.routes');
+const rideRoutes =require('./routes/ride.routes');
 
 connectToDb();
 
@@ -14,10 +16,13 @@ app.use(cors({
     origin:"http://localhost:5173",
     credentials:true
 }));app.use(cors());
+
 app.use(express.json());
 app.use(cookieParser());
-app.use("/users", userRoute);
-app.use("/captain", captainRoute);
+app.use("/users", userRoutes);
+app.use("/captain", captainRoutes);
+app.use("/maps", mapRoutes);
+app.use("/rides", rideRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World");

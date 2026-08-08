@@ -1,7 +1,10 @@
 // This actually validate the user and contains logic
 
 const validate = (schema) => (req, res, next) => {
-  const result = schema.safeParse(req.body);
+  
+  const data=req.method==="GET"?req.query:req.body;
+
+  const result = schema.safeParse(data);
 
   if (!result.success) {
     return res.status(400).json({
@@ -13,7 +16,13 @@ const validate = (schema) => (req, res, next) => {
     });
   }
 
-  req.body = result.data;
+  if (req.method === "GET") {
+    req.query = result.data;
+  } 
+  else {
+    req.body = result.data;
+  }
+
   next();
 };
 

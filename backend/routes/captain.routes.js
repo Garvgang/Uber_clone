@@ -1,7 +1,7 @@
 const express=require('express');
 const router=express.Router();
 
-// router.post('/name_ofroute',middleware(zod_validation),controller)
+// router.post('/name_of_route',middleware(zod_validation),controller)
 const {registerCaptain,loginCaptain,getCaptainProfile,logoutCaptain} =require('../controllers/captain.controller');
 const {registerCaptainSchema,loginCaptainSchema} =require('../validations/captain.validation');
 const authMiddleware=require('../middleware/auth.middleware');
