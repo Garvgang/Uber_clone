@@ -24,4 +24,5 @@ const createCaptain=async ({fullname,email,password,color,plate,vehicle,vehicleT
     });
     return captain;
 };
+
 module.exports={createCaptain};
