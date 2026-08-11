@@ -4,7 +4,7 @@ const blackListTokenModel=require('../models/blacklistToken.model');
 
 exports.registerCaptain = async (req, res) => {
     try {
-        const { fullname, email, password ,vehicle} = req.body;
+        const { fullname, email, password ,vehicle,location } = req.body;
 
         const existingCaptain= await captainModel.findOne({ email });
 
@@ -17,10 +17,14 @@ exports.registerCaptain = async (req, res) => {
         const hashedPassword = await captainModel.hashPassword(password);
 
         const captain = await captainService.createCaptain({
-            fullname,
+            firstname: fullname.firstname,
+            lastname: fullname.lastname,
             email,
             password: hashedPassword,
-            vehicle,
+            color: vehicle.color,
+            plate: vehicle.plate,
+            capacity: vehicle.capacity,
+            vehicleType: vehicle.vehicleType
         });
 
         const token = captain.generateAuthToken();

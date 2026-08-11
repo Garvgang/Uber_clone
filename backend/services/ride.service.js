@@ -32,20 +32,20 @@ async function getFare(pickup, destination) {
     };
 
     const fare = {
-        auto: baseFare.auto +
+        auto: Math.round(baseFare.auto +
             (distanceKm * perKmRate.auto) +
-            (durationMin * perMinRate.auto),
+            (durationMin * perMinRate.auto)),
 
-        car: baseFare.car +
+        car: Math.round(baseFare.car +
             (distanceKm * perKmRate.car) +
-            (durationMin * perMinRate.car),
+            (durationMin * perMinRate.car)),
 
-        moto: baseFare.moto +
+        moto: Math.round(baseFare.moto +
             (distanceKm * perKmRate.moto) +
-            (durationMin * perMinRate.moto)
+            (durationMin * perMinRate.moto))
     };
 
-    return fare;
+    return {fare,durationMin:Math.ceil(durationMin)};
 }
 
 module.exports.getFare = getFare;

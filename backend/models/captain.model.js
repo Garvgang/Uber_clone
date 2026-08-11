@@ -63,7 +63,8 @@ const captainSchema=mongoose.Schema({
         type: {
             type: String,
             enum: ['Point'],
-            default: 'Point'
+            default: 'Point',
+            required: true
         },
         coordinates: {
             type: [Number],

@@ -1,8 +1,8 @@
 // this will interact with mongodb
 const captainModel=require('../models/captain.model');
 
-const createCaptain=async ({fullname,email,password,color,plate,vehicle,vehicleType})=>{
-    if (!fullname?.firstname || !email || !password || !vehicle) {
+const createCaptain=async ({fullname,email,password,color,plate,vehicle,vehicleType,location})=>{
+    if (!fullname?.firstname || !email || !password || !vehicle || !location) {
         throw new Error('All fields are required');
     }
     if (!vehicle.color || !vehicle.plate || !vehicle.capacity || !vehicle.vehicleType) {
@@ -20,7 +20,8 @@ const createCaptain=async ({fullname,email,password,color,plate,vehicle,vehicleT
             plate:vehicle.plate,
             capacity:vehicle.capacity,
             vehicleType:vehicle.vehicleType,
-        }
+        },
+        location
     });
     return captain;
 };

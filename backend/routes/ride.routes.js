@@ -2,7 +2,7 @@ const express=require('express');
 const router=express.Router();
 const validate=require('../middleware/validate');
 const authMiddleware=require('../middleware/auth.middleware');
-const {rideSchema,getRideFareSchema}=require('../validations/ride.validation');
+const {rideSchema,startRideSchema,getRideFareSchema,confirmRideSchema,endRideSchema}=require('../validations/ride.validation');
 const rideController=require('../controllers/ride.controller');
 
 router.post(
