@@ -7,12 +7,10 @@ import LiveTracking from '../components/LiveTracking'
 
 const CaptainRiding = () => {
 
-    const [ finishRidePanel, setFinishRidePanel ] = useState(false)
-    const finishRidePanelRef = useRef(null)
-    const location = useLocation()
-    const rideData = location.state?.ride
-
-
+    const [ finishRidePanel, setFinishRidePanel ] = useState(false);
+    const finishRidePanelRef = useRef(null);
+    const location = useLocation();
+    const rideData = location.state?.ride;
 
     useGSAP(function () {
         if (finishRidePanel) {
@@ -24,7 +22,7 @@ const CaptainRiding = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ finishRidePanel ])
+    }, [ finishRidePanel ]);
 
 
     return (
@@ -62,4 +60,4 @@ const CaptainRiding = () => {
     )
 }
 
-export default CaptainRiding
+export default CaptainRiding;

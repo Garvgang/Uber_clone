@@ -23,8 +23,10 @@ const CaptainHome = () => {
     const { captain } = useContext(CaptainDataContext)
 
     useEffect(() => {
+        if (!captain?.id) return;
+
         socket.emit('join', {
-            userId: captain._id,
+            userId: captain.id,
             userType: 'captain'
         })
         const updateLocation = () => {
@@ -32,7 +34,7 @@ const CaptainHome = () => {
                 navigator.geolocation.getCurrentPosition(position => {
 
                     socket.emit('update-location-captain', {
-                        userId: captain._id,
+                        userId: captain.id,
                         location: {
                             ltd: position.coords.latitude,
                             lng: position.coords.longitude
@@ -43,24 +45,36 @@ const CaptainHome = () => {
         }
 
         const locationInterval = setInterval(updateLocation, 10000)
-        updateLocation()
+        updateLocation();
+        return () => {
+            clearInterval(locationInterval);
+        };
+    }, [captain,socket])
 
-        // return () => clearInterval(locationInterval)
-    }, [])
+   useEffect(() => {
 
-    socket.on('new-ride', (data) => {
+    if (!socket) return;
 
-        setRide(data)
-        setRidePopupPanel(true)
+    const handleNewRide = (data) => {
+        console.log("NEW RIDE RECEIVED:", data);
+        setRide(data);
+        setRidePopupPanel(true);
+    }
 
-    })
+    socket.on('new-ride', handleNewRide);
+
+    return () => {
+        socket.off('new-ride', handleNewRide);
+    }
+
+}, [socket])
 
     async function confirmRide() {
 
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
 
             rideId: ride._id,
-            captainId: captain._id,
+            captainId: captain.id,
 
 
         }, {

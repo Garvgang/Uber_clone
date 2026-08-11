@@ -11,7 +11,7 @@ const registerCaptainSchema = z.object({
             .string()
             .trim()
             .min(3, "Last name must be at least 3 characters long")
-            .optional(),    
+            .optional(),
     }),
 
     email: z
@@ -19,6 +19,10 @@ const registerCaptainSchema = z.object({
         .trim()
         .email("Invalid email address")
         .min(5, "Email must be at least 5 characters long"),
+
+    password: z
+        .string()
+        .min(6, "Password must be at least 6 characters long"),
 
     vehicle: z.object({
         color: z
@@ -38,22 +42,21 @@ const registerCaptainSchema = z.object({
         }),
     }),
 
-    password: z
-        .string()
-        .min(6, "Password must be at least 6 characters long"),
+    location: z.object({
+        type: z.literal("Point"),
+        coordinates: z
+            .array(z.number())
+            .length(2, "Location must contain longitude and latitude"),
+    }),
 });
 
 const loginCaptainSchema = z.object({
     email: z
-        .string({
-            required_error: "Email is required",
-        })
+        .string()
         .email("Invalid email address"),
 
     password: z
-        .string({
-            required_error: "Password is required",
-        })
+        .string()
         .min(6, "Password must be at least 6 characters long"),
 });
 

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const ConfirmRidePopUp = (props) => {
-    const [ otp, setOtp ] = useState('')
+    const [otp, setOtp] = useState('')
     const navigate = useNavigate()
 
     const submitHander = async (e) => {
@@ -25,8 +25,6 @@ const ConfirmRidePopUp = (props) => {
             props.setRidePopupPanel(false)
             navigate('/captain-riding', { state: { ride: props.ride } })
         }
-
-
     }
     return (
         <div>

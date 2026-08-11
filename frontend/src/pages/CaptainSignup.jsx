@@ -23,42 +23,55 @@ const CaptainSignup = () => {
 
 
   const submitHandler = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const captainData = {
-    fullname: {
-      firstname: firstName,
-      lastname: lastName
-    },
-    email,
-    password,
-    vehicle: {
-      color: vehicleColor,
-      plate: vehiclePlate,
-      capacity: Number(vehicleCapacity),
-      vehicleType
-    }
-  };
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const { latitude, longitude } = position.coords;
 
-  console.log(captainData);
+            const captainData = {
+                fullname: {
+                    firstname: firstName,
+                    lastname: lastName
+                },
+                email,
+                password,
+                vehicle: {
+                    color: vehicleColor,
+                    plate: vehiclePlate,
+                    capacity: Number(vehicleCapacity),
+                    vehicleType
+                },
+                location: {
+                    type: "Point",
+                    coordinates: [longitude, latitude]
+                }
+            };
 
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/captain/register`,
-      captainData
+            console.log(captainData);
+
+            try {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_BASE_URL}/captain/register`,
+                    captainData
+                );
+
+                console.log(response.data);
+
+                if (response.status === 201) {
+                    setCaptain(response.data.captain);
+                    localStorage.setItem("token", response.data.token);
+                    navigate("/captain-home");
+                }
+            } catch (err) {
+                console.log(err.response?.data);
+            }
+        },
+        (error) => {
+            console.log("Location error:", error);
+            alert("Please allow location access to register as a captain.");
+        }
     );
-
-    console.log(response.data);
-
-    if (response.status === 201) {
-      setCaptain(response.data.captain);
-      localStorage.setItem("token", response.data.token);
-      navigate("/captain-home");
-    }
-
-  } catch (err) {
-    console.log(err.response.data);
-  }
 };
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
