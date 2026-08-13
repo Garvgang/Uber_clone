@@ -9,9 +9,11 @@ import { useEffect, useContext } from 'react'
 import { SocketContext } from '../context/SocketContext'
 import { CaptainDataContext } from '../context/CapatainContext'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const CaptainHome = () => {
 
+    const navigate = useNavigate()
     const [ ridePopupPanel, setRidePopupPanel ] = useState(false)
     const [ confirmRidePopupPanel, setConfirmRidePopupPanel ] = useState(false)
 
@@ -52,22 +54,19 @@ const CaptainHome = () => {
     }, [captain,socket])
 
    useEffect(() => {
+        if (!socket) return;
 
-    if (!socket) return;
+        const handleNewRide = (data) => {
+            setRide(data);
+            setRidePopupPanel(true);
+        };
 
-    const handleNewRide = (data) => {
-        console.log("NEW RIDE RECEIVED:", data);
-        setRide(data);
-        setRidePopupPanel(true);
-    }
+        socket.on('new-ride', handleNewRide);
 
-    socket.on('new-ride', handleNewRide);
-
-    return () => {
-        socket.off('new-ride', handleNewRide);
-    }
-
-}, [socket])
+        return () => {
+            socket.off('new-ride', handleNewRide);
+        };
+    }, [socket]);
 
     async function confirmRide() {
 
@@ -117,9 +116,12 @@ const CaptainHome = () => {
         <div className='h-screen'>
             <div className='fixed p-6 top-0 flex items-center justify-between w-screen'>
                 <img className='w-16' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
-                <Link to='/captain-home' className=' h-10 w-10 bg-white flex items-center justify-center rounded-full'>
+                <button 
+                    onClick={logoutCaptain}
+                    className='h-10 w-10 bg-white flex items-center justify-center rounded-full'
+                >
                     <i className="text-lg font-medium ri-logout-box-r-line"></i>
-                </Link>
+                </button>
             </div>
             <div className='h-3/5'>
                 <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />

@@ -13,16 +13,18 @@ function initializeSocket(server) {
     });
 
     io.on('connection', (socket) => {
-        console.log(`Client connected: ${socket.id}`);
-
 
         socket.on('join', async (data) => {
             const { userId, userType } = data;
 
             if (userType === 'user') {
-                await userModel.findByIdAndUpdate(userId, { socketId: socket.id });
+                await userModel.findByIdAndUpdate(userId, {
+                    socketId: socket.id
+                });
             } else if (userType === 'captain') {
-                await captainModel.findByIdAndUpdate(userId, { socketId: socket.id });
+                await captainModel.findByIdAndUpdate(userId, {
+                    socketId: socket.id
+                });
             }
         });
 
@@ -30,16 +32,22 @@ function initializeSocket(server) {
         socket.on('update-location-captain', async (data) => {
             const { userId, location } = data;
 
-            if (!location || !location.ltd || !location.lng) {
-                return socket.emit('error', { message: 'Invalid location data' });
+            if (!location || location.lat == null || location.lng == null) {
+                return socket.emit('error', {
+                    message: 'Invalid location data'
+                });
             }
 
             await captainModel.findByIdAndUpdate(userId, {
                 location: {
-                    ltd: location.ltd,
-                    lng: location.lng
+                    type: 'Point',
+                    coordinates: [
+                        location.lng,
+                        location.lat
+                    ]
                 }
             });
+            console.log('Captain location updated:', userId, location);
         });
 
         socket.on('disconnect', () => {
@@ -49,7 +57,7 @@ function initializeSocket(server) {
 }
 
 const sendMessageToSocketId = (socketId, messageObject) => {
-    console.log(messageObject);
+    console.log('Sending socket event:',messageObject.event,'to:',socketId);
 
     if (io) {
         io.to(socketId).emit(messageObject.event, messageObject.data);

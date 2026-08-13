@@ -56,23 +56,25 @@ function getOtp(length = 6) {
     return crypto.randomInt(min, max).toString();
 }
 
-module.exports.createRide=async ({user,pickup,destination,vehicleType})=>{
-    if(!user || !pickup || !destination || !vehicleType){
+module.exports.createRide = async ({ user, pickup, destination, vehicleType }) => {
+    if (!user || !pickup || !destination || !vehicleType) {
         throw new Error('All fields are required');
     }
-    
-    const fare=await getFare(pickup,destination);
-    
+
+    const fareData = await getFare(pickup, destination);
+
     const ride = await rideModel.create({
         user,
         pickup,
         destination,
-        otp:getOtp(6),
-        fare:fare[vehicleType],
-    })
+        vehicleType,
+        otp: getOtp(6),
+        fare: fareData.fare[vehicleType],
+        duration: fareData.durationMin
+    });
 
     return ride;
-}
+};
 
 module.exports.confirmRide=async ({rideId,captain})=>{
     if(!rideId){

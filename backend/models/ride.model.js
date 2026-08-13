@@ -24,7 +24,7 @@ const rideSchema=new mongoose.Schema({
     },
     status:{
         type:String,
-        enum:['pending','accepted','completed','cancelled'],
+        enum:['pending','accepted','ongoing','completed','cancelled'],
         default:'pending',
     },
     duration:{
@@ -46,7 +46,12 @@ const rideSchema=new mongoose.Schema({
         type:String,
         select:false,
         required:true
-    }
+    },
+    vehicleType: {
+        type: String,
+        enum: ['car', 'moto', 'auto'],
+        required: true
+    },
 });
 
 module.exports=mongoose.model('ride',rideSchema);
