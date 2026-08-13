@@ -13,7 +13,8 @@ const rideRoutes =require('./routes/ride.routes');
 connectToDb();
 
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:["http://localhost:5173",
+    'https://uber-clone-nu-vert.vercel.app'],
     credentials:true
 }));
 
