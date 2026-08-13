@@ -67,7 +67,30 @@ const CaptainHome = () => {
             socket.off('new-ride', handleNewRide);
         };
     }, [socket]);
+    async function logoutCaptain() {
+        try {
+            await axios.get(
+                `${import.meta.env.VITE_BASE_URL}/captain/logout`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            )
 
+            localStorage.removeItem('token')
+            navigate('/captain-login')
+
+        } catch (error) {
+            console.log(
+                'Logout error:',
+                error.response?.data || error.message
+            )
+
+            localStorage.removeItem('token')
+            navigate('/captain-login')
+        }
+    }
     async function confirmRide() {
 
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
